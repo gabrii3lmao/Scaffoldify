@@ -22,6 +22,6 @@ export { mongoose };
 
 export function mongoosePackageJson(): Record<string, string> {
   return {
-    mongoose: '^8.9.0',
+    mongoose: '*',
   };
 }

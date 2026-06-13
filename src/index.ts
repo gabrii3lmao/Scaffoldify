@@ -4,7 +4,12 @@ import { Command } from 'commander';
 import pc from 'picocolors';
 import { runPrompts } from './prompts.js';
 import { scaffoldProject } from './scaffolder.js';
-import { createSpinner, logError } from './utils.js';
+import {
+  createSpinner,
+  logError,
+  showWelcomeBanner,
+  printSummaryBox,
+} from './utils.js';
 import { readFileSync } from 'fs';
 import { fileURLToPath } from 'url';
 import { dirname, resolve } from 'path';
@@ -40,7 +45,7 @@ program
 ${pc.bold('Examples:')}
   ${pc.cyan('scaffoldify my-project')}              ${pc.dim('# interactive mode')}
   ${pc.cyan('scaffoldify my-project --yes')}        ${pc.dim('# use defaults')}
-  ${pc.cyan('scaffoldify my-project -f vue -d drizzle')}  ${pc.dim('# specific choices')}
+  ${pc.cyan('scaffoldify my-project -f react -d mongoose')}  ${pc.dim('# React + MongoDB')}
 `,
   );
 
@@ -65,8 +70,14 @@ function validateFlags(): void {
 }
 
 async function main() {
+  showWelcomeBanner();
+
   try {
     validateFlags();
+
+    // ─── [1/3] Gathering configurations ──────────
+    console.log(`  ${pc.bold(pc.cyan('┃ [1/3]'))} ${pc.bold('Gathering configurations')}`);
+    console.log(pc.dim('  ──────────────────────────────────────────────────\n'));
 
     let answers: import('./prompts.js').CliAnswers;
 
@@ -78,11 +89,14 @@ async function main() {
 
     if (options.yes) {
       answers = {
-        projectName: projectNameArg || 'my-fullstack-app',
+        projectName: projectNameArg || 'my-app',
         frontend: options.frontend || defaults.frontend,
         backend: options.backend || defaults.backend,
         orm: options.database || defaults.orm,
       };
+      console.log(
+        `  ${pc.dim('Using defaults:')} ${pc.cyan(answers.frontend)} frontend, ${pc.cyan(answers.orm)} database\n`,
+      );
     } else {
       answers = projectNameArg
         ? await runPrompts(projectNameArg)
@@ -93,11 +107,11 @@ async function main() {
       if (options.database) answers.orm = options.database;
     }
 
-    const spinner = createSpinner('Preparing your fullstack project...');
-    spinner.start();
-    spinner.succeed();
+    // ─── [2/3] Scaffolding files ─────────────────
+    const projectPath = await scaffoldProject(answers);
 
-    await scaffoldProject(answers);
+    // ─── [3/3] Summary ───────────────────────────
+    printSummaryBox(answers.projectName, answers.frontend, answers.orm);
   } catch (error) {
     logError(`Something went wrong: ${error instanceof Error ? error.message : String(error)}`);
     process.exit(1);

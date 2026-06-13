@@ -82,9 +82,9 @@ main().catch((err) => {
 
 export function drizzlePackageJson(): Record<string, string> {
   return {
-    'drizzle-orm': '^0.38.0',
-    'drizzle-kit': '^0.30.0',
-    'pg': '^8.13.0',
-    '@types/pg': '^8.11.0',
+    'drizzle-orm': '*',
+    'drizzle-kit': '*',
+    'pg': '*',
+    '@types/pg': '*',
   };
 }
