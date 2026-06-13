@@ -1,0 +1,35 @@
+{
+  "name": "scaffoldify",
+  "version": "1.0.0",
+  "description": "CLI tool to scaffold production-ready fullstack boilerplates",
+  "type": "module",
+  "bin": {
+    "scaffoldify": "./dist/index.js"
+  },
+  "files": [
+    "dist",
+    "templates"
+  ],
+  "scripts": {
+    "build": "tsc",
+    "dev": "tsc --watch",
+    "start": "node dist/index.js",
+    "prepublishOnly": "npm run build"
+  },
+  "dependencies": {
+    "commander": "^12.1.0",
+    "fs-extra": "^11.2.0",
+    "inquirer": "^12.3.0",
+    "ora": "^8.1.0",
+    "picocolors": "^1.1.1"
+  },
+  "devDependencies": {
+    "@types/fs-extra": "^11.0.4",
+    "@types/node": "^22.10.0",
+    "typescript": "^5.7.0"
+  },
+  "engines": {
+    "node": ">=20.0.0"
+  },
+  "license": "MIT"
+}
