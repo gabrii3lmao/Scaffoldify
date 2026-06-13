@@ -186,7 +186,7 @@ scaffoldify my-test-project --yes
 
 ## 📄 License
 
-MIT © [Gabriel](https://github.com/gabrii3l)
+MIT © [Gabriel](https://github.com/gabrii3lmao)
 
 ---
 
